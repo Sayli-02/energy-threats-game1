@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Dashboard — Energy Threads</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="dash-layout">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo-icon">🌌</span>
+        <h2>ENERGY THREADS</h2>
+      </div>
+
+      <div class="user-badge">
+        <div id="user-avatar" class="avatar">E</div>
+        <div class="user-info">
+          <h3 id="user-name">Commander</h3>
+          <span id="user-title" class="title-pill">Energy Initiate</span>
+        </div>
+      </div>
+
+      <div class="level-box">
+        <div class="level-header">
+          <span>LEVEL <strong id="user-level">1</strong></span>
+          <span id="user-xp">0 / 100 XP</span>
+        </div>
+        <div class="xp-bar-wrap">
+          <div id="xp-bar-fill" class="xp-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#stats" class="nav-item active">📊 Command Stats</a>
+        <a href="#leaderboard" class="nav-item">🏆 Global Ranking</a>
+        <a href="#history" class="nav-item">📜 Combat Logs</a>
+      </nav>
+
+      <button id="btn-play-game" class="btn-play-game">🎮 LAUNCH GAME ➔</button>
+
+      <button id="btn-logout" class="btn-logout">Sign Out</button>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Stats Grid -->
+      <section id="stats" class="section">
+        <h2 class="section-title">COMMANDER STATS OVERVIEW</h2>
+
+        <div class="stats-grid">
+          <div class="stat-card highscore">
+            <span class="stat-icon">🏆</span>
+            <div class="stat-val" id="stat-highscore">0</div>
+            <div class="stat-label">HIGH SCORE</div>
+          </div>
+
+          <div class="stat-card kills">
+            <span class="stat-icon">👾</span>
+            <div class="stat-val" id="stat-kills">0</div>
+            <div class="stat-label">TOTAL THREATS NEUTRALIZED</div>
+          </div>
+
+          <div class="stat-card games">
+            <span class="stat-icon">🕹️</span>
+            <div class="stat-val" id="stat-games">0</div>
+            <div class="stat-label">GAMES PLAYED</div>
+          </div>
+
+          <div class="stat-card wave">
+            <span class="stat-icon">🌊</span>
+            <div class="stat-val" id="stat-wave">0</div>
+            <div class="stat-label">BEST WAVE CLEARED</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analytics Charts Section -->
+      <section id="analytics" class="section">
+        <h2 class="section-title">📈 COMBAT ANALYTICS & CHARTS</h2>
+        <div class="flex-row">
+          <div class="chart-card flex-1">
+            <h3 class="chart-title">SCORE HISTORY TREND</h3>
+            <canvas id="scoreChart"></canvas>
+          </div>
+          <div class="chart-card flex-1">
+            <h3 class="chart-title">SPELL USAGE DISTRIBUTION</h3>
+            <canvas id="spellChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Achievements Section -->
+      <section id="achievements" class="section">
+        <h2 class="section-title">🎖️ COMMANDER ACHIEVEMENTS</h2>
+        <div class="achievements-grid" id="achievements-grid">
+          <!-- Dynamically generated in dashboard.js -->
+        </div>
+      </section>
+
+      <!-- Leaderboard & Recent Games Flex Row -->
+      <div class="flex-row">
+        
+        <!-- Global Leaderboard -->
+        <section id="leaderboard" class="section flex-1">
+          <h2 class="section-title">🏆 GLOBAL LEADERBOARD</h2>
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>RANK</th>
+                  <th>COMMANDER</th>
+                  <th>LEVEL</th>
+                  <th>HIGH SCORE</th>
+                  <th>KILLS</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+                <tr><td colspan="5" class="loading-td">Scanning global matrix...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Combat Logs / Recent Games -->
+        <section id="history" class="section flex-1">
+          <h2 class="section-title">📜 RECENT COMBAT LOGS</h2>
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>SCORE</th>
+                  <th>WAVES</th>
+                  <th>KILLS</th>
+                  <th>DURATION</th>
+                  <th>DATE</th>
+                </tr>
+              </thead>
+              <tbody id="history-body">
+                <tr><td colspan="5" class="loading-td">Fetching combat logs...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

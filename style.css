@@ -1,0 +1,278 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #000;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+
+#container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#webcam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+#canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#status {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  letter-spacing: 0.25em;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+  text-shadow: 0 0 20px rgba(0,200,255,0.8);
+}
+
+#status .sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 10px;
+  letter-spacing: 0.18em;
+}
+
+#hud {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.15);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(0,220,255,0.8);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.bar {
+  width: 180px;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 14px auto 0;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: rgba(0,220,255,0.5);
+  animation: lp 1.4s ease-in-out infinite;
+}
+
+@keyframes lp {
+  0%,100% { width:15%; margin-left:0 }
+  50% { width:55%; margin-left:45% }
+}
+
+/* ============================================================
+   FEATURE 3 — Gesture Classifier UI
+   ============================================================ */
+#classifier {
+  position: fixed;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  width: 200px;
+  padding: 18px 16px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  border: 1px solid rgba(0, 234, 255, 0.18);
+  border-radius: 14px;
+  box-shadow:
+    0 0 28px rgba(0, 234, 255, 0.08),
+    inset 0 0 20px rgba(0, 234, 255, 0.04);
+  font-family: 'Courier New', monospace;
+  color: rgba(255, 255, 255, 0.85);
+  z-index: 100;
+  pointer-events: none;
+  user-select: none;
+}
+
+.clf-title {
+  font-size: 8px;
+  letter-spacing: 0.38em;
+  color: rgba(0, 234, 255, 0.55);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 234, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.clf-hand {
+  padding: 4px 0 8px;
+}
+
+.clf-hand-label {
+  font-size: 7px;
+  letter-spacing: 0.32em;
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.clf-gesture-name {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: #00eaff;
+  text-shadow: 0 0 12px rgba(0, 234, 255, 0.7);
+  margin-bottom: 8px;
+  min-height: 18px;
+  transition: color 0.2s;
+}
+
+.clf-gesture-name.inactive {
+  color: rgba(255, 255, 255, 0.2);
+  text-shadow: none;
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.clf-bar-wrap {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.clf-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #00eaff, #bf00ff);
+  box-shadow: 0 0 8px rgba(0, 234, 255, 0.6);
+  transition: width 0.15s ease-out;
+}
+
+.clf-conf {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.3);
+  min-height: 10px;
+}
+
+.clf-divider {
+  height: 1px;
+  background: rgba(0, 234, 255, 0.08);
+  margin: 6px 0 10px;
+}
+
+/* ============================================================
+   GAME UI
+   ============================================================ */
+#game-ui {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-family: 'Courier New', monospace;
+  color: #fff;
+  z-index: 100;
+  pointer-events: none;
+  text-shadow: 0 0 10px rgba(0, 234, 255, 0.8);
+}
+#score-board {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  margin-bottom: 5px;
+}
+#high-score-board {
+  font-size: 12px;
+  color: #ff8c00;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+#health-board {
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#health-bar-wrap {
+  width: 200px;
+  height: 8px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+#health-bar-fill {
+  width: 100%;
+  height: 100%;
+  background: #39ff6a;
+  box-shadow: 0 0 10px #39ff6a;
+  transition: width 0.2s, background 0.2s;
+}
+
+#game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.85);
+  border: 1px solid #ff3cac;
+  box-shadow: 0 0 40px rgba(255, 60, 172, 0.5);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  z-index: 200;
+  font-family: 'Courier New', monospace;
+}
+#game-over .title {
+  font-size: 32px;
+  color: #ff3cac;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 20px #ff3cac;
+  margin-bottom: 10px;
+}
+#game-over .sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.1em;
+  margin-bottom: 30px;
+}
+#game-over .score {
+  font-size: 24px;
+  color: #00eaff;
+  margin-bottom: 30px;
+}
+#game-over .restart-hint {
+  font-size: 16px;
+  color: #ff8c00;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }

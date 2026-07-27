@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Threads — AI Motion Defense Game</title>
+  <link rel="stylesheet" href="landing.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Canvas Background Effect -->
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="landing-container">
+    
+    <!-- Hero Section -->
+    <div class="hero-box">
+      <div class="logo-badge">AI POWERED</div>
+      <h1 class="hero-title">ENERGY THREADS</h1>
+      <p class="hero-sub">Control digital magic with real-time hand gestures. Defend against incoming energy threats using your webcam.</p>
+      
+      <div class="spell-pills">
+        <span class="pill laser">☝ Point: Laser</span>
+        <span class="pill shield">🖐 Open: Shield</span>
+        <span class="pill gravity">✊ Fist: Gravity</span>
+        <span class="pill sigil">✌ Peace: Sigil</span>
+        <span class="pill supernova">🌌 Close: Supernova</span>
+      </div>
+    </div>
+
+    <!-- Auth Card -->
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button id="tab-login" class="tab-btn active">Log In</button>
+        <button id="tab-signup" class="tab-btn">Sign Up</button>
+      </div>
+
+      <form id="auth-form">
+        <div id="username-group" class="form-group" style="display: none;">
+          <label for="username">COMMANDER NAME</label>
+          <input type="text" id="username" placeholder="Enter username..." autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="email">EMAIL ADDRESS</label>
+          <input type="email" id="email" placeholder="commander@energy.io" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">ACCESS CODE</label>
+          <input type="password" id="password" placeholder="••••••••" required minlength="6">
+        </div>
+
+        <div id="auth-error" class="auth-error"></div>
+
+        <button type="submit" id="auth-submit-btn" class="btn-primary">INITIATE SESSION ➔</button>
+      </form>
+
+      <div class="divider"><span>OR</span></div>
+
+      <button id="btn-guest" class="btn-secondary">🎮 PLAY AS GUEST (No Cloud Save)</button>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { signUp, logIn, getCurrentUser } from './auth.js';
+
+    // Auto redirect to dashboard if logged in
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await getCurrentUser();
+      if (user) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    // UI Tab Switcher
+    let isSignUp = false;
+    const tabLogin = document.getElementById('tab-login');
+    const tabSignup = document.getElementById('tab-signup');
+    const usernameGroup = document.getElementById('username-group');
+    const submitBtn = document.getElementById('auth-submit-btn');
+    const errorEl = document.getElementById('auth-error');
+
+    tabLogin.addEventListener('click', () => {
+      isSignUp = false;
+      tabLogin.classList.add('active');
+      tabSignup.classList.remove('active');
+      usernameGroup.style.display = 'none';
+      submitBtn.textContent = 'INITIATE SESSION ➔';
+      errorEl.textContent = '';
+    });
+
+    tabSignup.addEventListener('click', () => {
+      isSignUp = true;
+      tabSignup.classList.add('active');
+      tabLogin.classList.remove('active');
+      usernameGroup.style.display = 'block';
+      submitBtn.textContent = 'CREATE ACCOUNT ➔';
+      errorEl.textContent = '';
+    });
+
+    // Auth Form Submission
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.textContent = '';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'AUTHENTICATING...';
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const username = document.getElementById('username').value;
+
+      try {
+        if (isSignUp) {
+          await signUp(email, password, username);
+          alert('Account created successfully! Redirecting...');
+        } else {
+          await logIn(email, password);
+        }
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        errorEl.textContent = err.message || 'Authentication failed.';
+        submitBtn.disabled = false;
+        submitBtn.textContent = isSignUp ? 'CREATE ACCOUNT ➔' : 'INITIATE SESSION ➔';
+      }
+    });
+
+    // Guest Mode
+    document.getElementById('btn-guest').addEventListener('click', () => {
+      window.location.href = 'game.html';
+    });
+
+    // Canvas Background Particles
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = Array.from({ length: 60 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 2 + 1,
+      color: ['#00eaff', '#bf00ff', '#39ff6a', '#ff3cac'][Math.floor(Math.random() * 4)],
+      vx: (Math.random() - 0.5) * 0.8,
+      vy: (Math.random() - 0.5) * 0.8
+    }));
+
+    function anim() {
+      ctx.fillStyle = 'rgba(5, 5, 12, 0.2)';
+      ctx.fillRect(0, 0, width, height);
+
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(anim);
+    }
+    anim();
+  </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Threads — Play</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .btn-back-dash {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 150;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 234, 255, 0.3);
+      color: #00eaff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+    .btn-back-dash:hover {
+      background: rgba(0, 234, 255, 0.2);
+      border-color: #00eaff;
+      box-shadow: 0 0 15px rgba(0, 234, 255, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+
+<button id="btn-back-dash" class="btn-back-dash">🏠 DASHBOARD</button>
+
+<div id="container">
+  <video id="webcam" playsinline autoplay muted></video>
+  <canvas id="canvas"></canvas>
+
+  <div id="loading">
+    Initializing energy matrix
+    <div class="bar"><div class="fill"></div></div>
+  </div>
+
+  <div id="status" style="display:none">
+    Show both hands
+    <div class="sub">bring close · pull apart · feel the energy</div>
+  </div>
+
+  <div id="hud">energy threads</div>
+
+  <!-- GAME UI -->
+  <div id="game-ui">
+    <div id="score-board">SCORE: <span id="score-val">0</span></div>
+    <div id="high-score-board">HIGH SCORE: <span id="high-score-val">0</span></div>
+    <div id="health-board">HEALTH: <div id="health-bar-wrap"><div id="health-bar-fill"></div></div></div>
+  </div>
+
+  <div id="game-over" style="display:none">
+    <div class="title">SYSTEM FAILURE</div>
+    <div class="sub">THREATS BREACHED DEFENSES</div>
+    <div class="score">FINAL SCORE: <span id="final-score">0</span></div>
+    <div id="cloud-save-status" style="font-size:12px; color:#39ff6a; margin-bottom:15px; display:none;">☁️ Synced to Supabase Cloud!</div>
+    <div class="restart-hint">Show ✌ Peace Sign to Restart</div>
+  </div>
+
+  <!-- Gesture Classifier UI -->
+  <div id="classifier">
+    <div class="clf-title">GESTURE SCANNER & SPELLS</div>
+    <div style="font-size: 8px; color: #ff8c00; margin-bottom: 12px; text-align: center; text-transform: uppercase; letter-spacing: 0.15em; line-height: 1.4;">
+      <span style="color:#00eaff">Point</span>: Laser · <span style="color:#39ff6a">Open</span>: Shield<br>
+      <span style="color:#bf00ff">Fist</span>: Gravity · <span style="color:#ff8c00">Peace</span>: Sigil<br>
+      <span style="color:#fff">Two Hands Close</span>: Supernova
+    </div>
+    <div id="clf-hand0" class="clf-hand">
+      <div class="clf-hand-label">HAND 1</div>
+      <div class="clf-gesture-name" id="clf-name0">–– no hand ––</div>
+      <div class="clf-bar-wrap">
+        <div class="clf-bar-fill" id="clf-bar0"></div>
+      </div>
+      <div class="clf-conf" id="clf-conf0"></div>
+    </div>
+    <div class="clf-divider"></div>
+    <div id="clf-hand1" class="clf-hand">
+      <div class="clf-hand-label">HAND 2</div>
+      <div class="clf-gesture-name" id="clf-name1">–– no hand ––</div>
+      <div class="clf-bar-wrap">
+        <div class="clf-bar-fill" id="clf-bar1"></div>
+      </div>
+      <div class="clf-conf" id="clf-conf1"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MediaPipe -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+<!-- Supabase Module Script Bridge -->
+<script type="module">
+  import { supabase } from './supabase.js';
+  import { getCurrentUser } from './auth.js';
+
+  window.gameSupabase = supabase;
+  window.getCurrentUser = getCurrentUser;
+
+  document.getElementById('btn-back-dash').addEventListener('click', async () => {
+    const user = await getCurrentUser();
+    window.location.href = user ? 'dashboard.html' : 'index.html';
+  });
+</script>
+
+<!-- Game JS -->
+<script src="script.js"></script>
+
+</body>
+</html>
