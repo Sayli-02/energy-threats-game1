@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "routes": [
+    { "src": "/dashboard", "dest": "/dashboard.html" },
+    { "src": "/play", "dest": "/game.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
